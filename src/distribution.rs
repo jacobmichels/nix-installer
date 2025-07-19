@@ -20,7 +20,7 @@ impl Distribution {
     pub fn tarball_location(&self) -> TarballLocation {
         match self {
             Distribution::Nix => TarballLocation::UrlOrPath(
-                UrlOrPath::from_str(NIX_TARBALL_URL)
+                UrlOrPath::from_str(NIX_TARBALL_URL.expect("Fault: this build of Determinate Nix Installer is not equipped to install vanilla Nix."))
                     .expect("Fault: the built-in Nix tarball URL does not parse."),
             ),
             Distribution::DeterminateNix => {
@@ -38,7 +38,7 @@ pub enum TarballLocation {
     InMemory(&'static str, &'static [u8]),
 }
 
-pub const NIX_TARBALL_URL: &str = env!("NIX_TARBALL_URL");
+pub const NIX_TARBALL_URL: Option<&str> = option_env!("NIX_TARBALL_URL");
 
 #[cfg(feature = "determinate-nix")]
 pub const DETERMINATE_NIX_TARBALL_PATH: Option<&str> = Some(env!("DETERMINATE_NIX_TARBALL_PATH"));
